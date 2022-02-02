@@ -6,4 +6,4 @@ $ sudo install -y beakerlib beaker-redhat
 
 
 How to run test
-# ./runtest.sh
+$ sudo ./runtest.sh
