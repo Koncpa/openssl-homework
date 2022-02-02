@@ -1,0 +1,17 @@
+PURPOSE of /tools/openssl/Sanity/OpenSSL-and-similar
+Description: Test if crypto policy is respected in TLS connections made by OpenSSL.
+Author: Patrik Koncity <pkoncity@redhat.com>
+
+List of proposed test scenarios
+
+OpenSSL connection:
+In this phase is checked if SSL connection between server and client was established. If was no
+t established the next test phases wont execute.
+
+Testing default crypto-policy settings:
+This phase check if is applied DEFAULT crypto policy on TLS connection. Check if openSSL work with recommended algorithms. Try to find allowed shared ciphers, signature algorithms and sharedsignature algorithms. For default mode are allowed less vulnerable algorithms.
+
+Testing legacy crypto-policy settings: 
+This phase check if is applied LEGACY crypto policy on TLS connection. Check if openSSL work with recommended algorithms. Try to find allowed shared ciphers, signature algorithms and shared
+signature algorithms. For legacy mode are allowed more vulnerable algorithms. 
+
