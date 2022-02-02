@@ -48,14 +48,12 @@ rlJournalStart
         rlRun "update-crypto-policies --set DEFAULT" 0
         rlRun "openssl req -x509 -newkey rsa -keyout key.pem -out server.pem -days 365 -nodes -subj "/CN=localhost" " 0
         rlRun "timeout 8 openssl s_client >> $CLIENT_OUTPUT" &
-        rlRun "timeout 7 openssl s_server -key key.pem -cert server.pem >> $SERVER_OUTPUT " 124
+        rlRun "timeout 6 openssl s_server -key key.pem -cert server.pem >> $SERVER_OUTPUT " 124
         rlRun "grep 'CONNECTED' $CLIENT_OUTPUT" 0 "Checking if client was connected"
-        rlRun "grep 'ACCEPT' $SERVER_OUTPUT" 0 "Checking if server accept session"
-	if rlRun "grep -r 'CONNECTED' $CLIENT_OUTPUT" ; then
+        rlRun "grep 'DONE' $SERVER_OUTPUT" 0 "Checking if server accept session"
+        if rlRun "grep -r 'CONNECTED' $CLIENT_OUTPUT" ; then
 	    TMP=$((TMP+1))
-	fi
-#	rlRun "cp $CLIENT_OUTPUT client"
-#       rlRun "cp $SERVER_OUTPUT server"
+        fi
         rlRun "rm -rf key.pem server.pem $CLIENT_OUTPUT $SERVER_OUTPUT"
     rlPhaseEnd
     fi
@@ -65,11 +63,11 @@ rlJournalStart
         rlPhaseStartTest "Testing default crypto-policy settings"
             rlRun "update-crypto-policies --set DEFAULT" 0 
             rlRun "openssl req -x509 -newkey rsa -keyout key.pem -out server.pem -days 365 -nodes -subj "/CN=localhost" " 0	
-            rlRun "timeout 7 openssl s_client >> $CLIENT_OUTPUT" &
-	    rlRun "timeout 8 openssl s_server -key key.pem -cert server.pem >> $SERVER_OUTPUT" 124
-            rlRun "grep -r 'DHE-DSS-DES-CBC3-SHA' $SERVER_OUTPUT" 1 "Shared Ciphers DEFAULT"
-            rlRun "grep -r 'RSA+SHA1:DSA+SHA1' $SERVER_OUTPUT" 1 "Signature Algorithms DEFAULT"
-            rlRun "grep -r 'RSA+SHA1' $SERVER_OUTPUT" 1 "Shared Signature Algorithms DEFAULT"
+            rlRun "timeout 8 openssl s_client >> $CLIENT_OUTPUT" &
+            rlRun "timeout 6 openssl s_server -key key.pem -cert server.pem >> $SERVER_OUTPUT" 124
+            rlRun "grep 'DHE-DSS-DES-CBC3-SHA' $SERVER_OUTPUT" 1 "Shared Ciphers DEFAULT"
+            rlRun "grep 'RSA+SHA1:DSA+SHA1' $SERVER_OUTPUT" 1 "Signature Algorithms DEFAULT"
+            rlRun "grep 'RSA+SHA1' $SERVER_OUTPUT" 1 "Shared Signature Algorithms DEFAULT"
             rlRun "rm -rf key.pem server.pem $CLIENT_OUTPUT $SERVER_OUTPUT" 
         rlPhaseEnd
         fi
@@ -81,11 +79,11 @@ rlJournalStart
    	    rlRun "update-crypto-policies --set LEGACY" 0 
             rlRun " openssl req -x509 -newkey rsa -keyout key.pem -out server.pem -days 365 -nodes -subj "/CN=localhost" " 0
             rlRun "timeout 8 openssl s_client >> $CLIENT_OUTPUT" &
-            rlRun "timeout 7 openssl s_server -key key.pem -cert server.pem >> $SERVER_OUTPUT" 124
-	    rlRun "grep -r 'DHE-DSS-DES-CBC3-SHA' $SERVER_OUTPUT" 0 "Shared Ciphers LEGACY"
-            rlRun "grep -r 'RSA+SHA1:DSA+SHA1' $SERVER_OUTPUT" 0 "Signature Algorithms LEGACY"
-	    rlRun "grep -r 'RSA+SHA1' $SERVER_OUTPUT" 0 "Shared Signature Algorithms LEGACY"
-	    rlRun "rm -rf key.pem server.pem $CLIENT_OUTPUT $SERVER_OUTPUT"
+            rlRun "timeout 6 openssl s_server -key key.pem -cert server.pem >> $SERVER_OUTPUT" 124
+            rlRun "grep 'DHE-DSS-DES-CBC3-SHA' $SERVER_OUTPUT" 0 "Shared Ciphers LEGACY"
+            rlRun "grep 'RSA+SHA1:DSA+SHA1' $SERVER_OUTPUT" 0 "Signature Algorithms LEGACY"
+            rlRun "grep 'RSA+SHA1' $SERVER_OUTPUT" 0 "Shared Signature Algorithms LEGACY"
+            rlRun "rm -rf key.pem server.pem $CLIENT_OUTPUT $SERVER_OUTPUT"
         rlPhaseEnd
         fi
     fi
